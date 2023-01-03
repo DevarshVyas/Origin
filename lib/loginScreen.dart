@@ -1,19 +1,13 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:origin/dashboard.dart';
 import 'signupscreen.dart';
 
-
-
-class LoginScreen extends StatefulWidget{
+class LoginScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => InitState();
-
 }
 
-class InitState extends State<LoginScreen>{
-
+class InitState extends State<LoginScreen> {
   final formkey = GlobalKey<FormState>();
 
   @override
@@ -24,25 +18,23 @@ class InitState extends State<LoginScreen>{
   Widget initWidget() {
     return Form(
       key: formkey,
-      child: Scaffold
-        (
-        body: SingleChildScrollView
-          (
-          child: Column
-            (
-            children:
-            [
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
               Container(
                 height: 300,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(90)),
                     color: Colors.amber,
                     gradient: LinearGradient(
-                        colors: [(new Color(0xFFFFB300)), (new Color(0xFFFFB300))],
+                        colors: [
+                          (new Color(0xFFFFB300)),
+                          (new Color(0xFFFFB300))
+                        ],
                         begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter
-                    )
-                ),
+                        end: Alignment.bottomCenter)),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -69,137 +61,123 @@ class InitState extends State<LoginScreen>{
                   ),
                 ),
               ),
-
               Container(
-                margin: EdgeInsets.only(left: 20,right: 20, top: 70),
-                padding: EdgeInsets.only(left: 20,right: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.grey[200],
-                  boxShadow: [BoxShadow(
-                      offset: Offset(0, 10),
-                      blurRadius: 50,
-                      color: Color(0xffEEEEEE)
-                  )],
-                ),
-                alignment: Alignment.center,
-                child:TextFormField(
-                  cursorColor: Color(0xFFFFB300),
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.email_rounded,
-                      color: Color(0xFFFFB300),
-                    ),
-                    hintText: "Enter Email",
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 70),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.grey[200],
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 10),
+                          blurRadius: 50,
+                          color: Color(0xffEEEEEE))
+                    ],
                   ),
-                  validator: (value){
-                    if(value!.isEmpty ||!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}').hasMatch(value!)){
-                      return "Enter Valid email-id";
-                    }else{
-                      return null;
-                    }
-                  },
-
-                )),
-
-              Container(
-                margin: EdgeInsets.only(left: 20,right: 20, top: 20),
-                padding: EdgeInsets.only(left: 20,right: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.grey[200],
-                  boxShadow: [BoxShadow(
-                      offset: Offset(0, 10),
-                      blurRadius: 50,
-                      color: Color(0xffEEEEEE)
-                  )],
-                ),
-                alignment: Alignment.center,
-                child:TextFormField(
-                  obscureText: true,
-                  cursorColor: Color(0xFFFFB300),
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.vpn_key_rounded,
-                      color: Color(0xFFFFB300),
-
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    cursorColor: Color(0xFFFFB300),
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.email_rounded,
+                        color: Color(0xFFFFB300),
+                      ),
+                      hintText: "Enter Email",
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                     ),
-                    hintText: "Enter Password",
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                  ),
-                  validator: (value) {
-                    RegExp regex =
-                    RegExp(
-                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-                    if (value!.isEmpty) {
-                      return 'Please enter password';
-                    } else {
-                      if (!regex.hasMatch(value)) {
-                        return 'Enter valid password';
+                    validator: (value) {
+                      if (value!.isEmpty ||
+                          !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}')
+                              .hasMatch(value!)) {
+                        return "Enter Valid email-id";
                       } else {
                         return null;
                       }
-                    }
-                  } )),
-
+                    },
+                  )),
+              Container(
+                  margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.grey[200],
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 10),
+                          blurRadius: 50,
+                          color: Color(0xffEEEEEE))
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                      obscureText: true,
+                      cursorColor: Color(0xFFFFB300),
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.vpn_key_rounded,
+                          color: Color(0xFFFFB300),
+                        ),
+                        hintText: "Enter Passwords",
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      validator: (value) {
+                        RegExp regex = RegExp(
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                        if (value!.isEmpty) {
+                          return 'Please enter password';
+                        } else {
+                          if (!regex.hasMatch(value)) {
+                            return 'Enter valid password';
+                          } else {
+                            return null;
+                          }
+                        }
+                      })),
               Container(
                 margin: EdgeInsets.only(top: 20, right: 20),
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   child: Text("Forgot Password?"),
-                  onTap: () => {
-
-                  },
+                  onTap: () => {},
                 ),
               ),
-              GestureDetector
-                (
+              GestureDetector(
                 onTap: () => {
-                  if(formkey.currentState!.validate()){
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => Dashboard()
-                    ))
-                  }
-
-
-
-
+                  if (formkey.currentState!.validate())
+                    {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Dashboard()))
+                    }
                 },
-                child: Container
-                  (
+                child: Container(
                   margin: EdgeInsets.only(left: 20, right: 20, top: 70),
-                  padding: EdgeInsets.only(left: 20,right: 20),
+                  padding: EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.center,
                   height: 54,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [(new Color(0xFFFFB300)), (new Color(0xFFFFB300))],
+                        colors: [
+                          (new Color(0xFFFFB300)),
+                          (new Color(0xFFFFB300))
+                        ],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
                       borderRadius: BorderRadius.circular(50),
-                      boxShadow: [BoxShadow(
-                          offset: Offset(0, 15),
-                          blurRadius: 50,
-                          color: Color(0xFFFFB300)
-                      )]
-                  ),
-                  child: Text
-                    (
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 15),
+                            blurRadius: 50,
+                            color: Color(0xFFFFB300))
+                      ]),
+                  child: Text(
                     "Login",
-                    style: TextStyle
-                      (
-                        color: Colors.black
-
-                    ),
+                    style: TextStyle(color: Colors.black),
                   ),
-
                 ),
               ),
-
               Container(
                 margin: EdgeInsets.only(top: 10),
                 child: Row(
@@ -208,15 +186,14 @@ class InitState extends State<LoginScreen>{
                     Text("Don't have an account ?"),
                     GestureDetector(
                       onTap: () => {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => SignUpScreen()
-                        ))
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUpScreen()))
                       },
                       child: Text(
                         "Register Now",
-                        style: TextStyle(
-                            color: Color(0xFF000000)
-                        ),
+                        style: TextStyle(color: Color(0xFF000000)),
                       ),
                     )
                   ],
@@ -228,5 +205,4 @@ class InitState extends State<LoginScreen>{
       ),
     );
   }
-
 }
