@@ -12,7 +12,7 @@ class Display extends StatelessWidget {
           SizedBox(height: 100,),
           CircleAvatar(
             radius: 70,
-            child: Icon(Icons.home_filled, size: 120,),
+            child: Icon(Icons.list, size: 120,),
           ),
           SizedBox(height: 100,),
           Text('List Page content', style: TextStyle(fontSize: 30, color: Colors.white),),

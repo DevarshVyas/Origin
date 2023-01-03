@@ -12,7 +12,7 @@ class More extends StatelessWidget {
           SizedBox(height: 100,),
           CircleAvatar(
             radius: 70,
-            child: Icon(Icons.home_filled, size: 120,),
+            child: Icon(Icons.more, size: 120,),
           ),
           SizedBox(height: 100,),
           Text('More Page content', style: TextStyle(fontSize: 30, color: Colors.white),),

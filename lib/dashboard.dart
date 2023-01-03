@@ -4,6 +4,7 @@ import 'package:origin/loginScreen.dart';
 import 'package:origin/pages/categories.dart';
 import 'package:origin/pages/home.dart';
 import 'package:origin/pages/more.dart';
+import 'package:origin/pages/show.dart';
 import 'package:origin/pages/vendor.dart';
 import 'package:origin/signupscreen.dart';
 
@@ -54,6 +55,48 @@ class Dashboard extends StatefulWidget
         animationDuration: const Duration(microseconds: 300),
       ),
 
+      drawer: Drawer(
+
+        child: ListView(
+          children: [
+
+            UserAccountsDrawerHeader(
+                accountName: Text('Devarsh Vyas'), accountEmail: Text ('devarshvyas02@gmail,com'),),
+
+            ListTile(
+              leading: const Icon(Icons.payment),
+              title: const Text(' Payment methof '),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.home_filled),
+              title: const Text('Address'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text(' Household'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('LogOut'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+
+        ),
+      ),
+
       body: Container(
         color: Colors.white,
         width: double.infinity,
@@ -75,7 +118,7 @@ class Dashboard extends StatefulWidget
         widget = const Vendor();
         break;
       case 2:
-        widget = const Vendor();
+        widget = const Display();
         break;
       case 3:
         widget = const More();
