@@ -1,5 +1,3 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +11,10 @@ class LoginScreen extends StatefulWidget {
   State<StatefulWidget> createState() => InitState();
 }
 
-
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
 }
-
 
 class InitState extends State<LoginScreen> {
   final formkey = GlobalKey<FormState>();
@@ -28,7 +22,7 @@ class InitState extends State<LoginScreen> {
   final TextEditingController emailidcontroller = TextEditingController();
   final TextEditingController passcontroller = TextEditingController();
 
-  bool _isObscure= false;
+  bool _isObscure = false;
 
   String userEmail = "";
 
@@ -48,7 +42,7 @@ class InitState extends State<LoginScreen> {
                 height: 300,
                 decoration: BoxDecoration(
                     borderRadius:
-                    BorderRadius.only(bottomLeft: Radius.circular(90)),
+                        BorderRadius.only(bottomLeft: Radius.circular(90)),
                     color: Colors.amber,
                     gradient: LinearGradient(
                         colors: [
@@ -98,37 +92,27 @@ class InitState extends State<LoginScreen> {
                   // ),
                   alignment: Alignment.center,
                   child: TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: emailidcontroller,
-                    cursorColor: Color(0xFFFFB300),
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.email_rounded,
-                        color: Color(0xFFFFB300),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: emailidcontroller,
+                      cursorColor: Color(0xFFFFB300),
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.email_rounded,
+                          color: Color(0xFFFFB300),
+                        ),
+                        labelText: "Enter Email",
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.amber),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.amber),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.amber),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
                       ),
-                      labelText: "Enter Email",
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.amber
-                          ),
-                          borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.amber
-                          ),
-                          borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.amber
-                          ),
-                          borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0)
-                      ),
-                    ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Please enter your email address';
@@ -139,8 +123,7 @@ class InitState extends State<LoginScreen> {
                         }
                         // Return null if the entered email is valid
                         return null;
-                      }
-                  )),
+                      })),
               Container(
                   margin: EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: EdgeInsets.only(left: 20, right: 20),
@@ -162,97 +145,85 @@ class InitState extends State<LoginScreen> {
                       cursorColor: Color(0xFFFFB300),
                       decoration: InputDecoration(
                         hintText: "Enter your password",
-                          icon: Icon(
-                            Icons.lock,
-                            color: Color(0xFFFFB300),
-                          ),
-
-                            suffixIcon: IconButton(
-
-                                focusColor: Color(0xFFFFB300),
-                              
-                            icon: Icon(_isObscure ? Icons.visibility :Icons.visibility_off),
+                        icon: Icon(
+                          Icons.lock,
+                          color: Color(0xFFFFB300),
+                        ),
+                        suffixIcon: IconButton(
+                            focusColor: Color(0xFFFFB300),
+                            icon: Icon(_isObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off),
                             color: Colors.amber,
                             onPressed: () {
-                            setState(() { //refresh UI
-                            if(_isObscure){ //if passenable == true, make it false
-                            _isObscure = false;
-                            }else{
-                            _isObscure = true; //if passenable == false, make it true
-                            }
-                            });
-
-                        }
-
-                      ),
-
+                              setState(() {
+                                //refresh UI
+                                if (_isObscure) {
+                                  //if passenable == true, make it false
+                                  _isObscure = false;
+                                } else {
+                                  _isObscure =
+                                      true; //if passenable == false, make it true
+                                }
+                              });
+                            }),
                         labelText: "Enter your password",
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.amber
-                          ),
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
+                            borderSide: BorderSide(color: Colors.amber),
+                            borderRadius: BorderRadius.circular(10.0)),
                         errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.amber
-                            ),
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
+                            borderSide: BorderSide(color: Colors.amber),
+                            borderRadius: BorderRadius.circular(10.0)),
                         focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.amber
-                            ),
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
-
+                            borderSide: BorderSide(color: Colors.amber),
+                            borderRadius: BorderRadius.circular(10.0)),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
-
-            ),
-                validator: (value) {
-                RegExp regex = RegExp(
-                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-                if (value!.isEmpty) {
-                return 'Please enter password';
-                } else {
-                if (!regex.hasMatch(value!)) {
-                return 'Enter valid password';
-                } else {
-                return null;
-                }
-                }}
-                )
-                ),
+                            borderRadius: BorderRadius.circular(10.0)),
+                      ),
+                      validator: (value) {
+                        RegExp regex = RegExp(
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                        if (value!.isEmpty) {
+                          return 'Please enter password';
+                        } else {
+                          if (!regex.hasMatch(value!)) {
+                            return 'Enter valid password';
+                          } else {
+                            return null;
+                          }
+                        }
+                      })),
               Container(
                 margin: EdgeInsets.only(top: 20, right: 20),
                 alignment: Alignment.centerRight,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50)),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(50)),
                 child: GestureDetector(
                   child: Text("Forgot Password?"),
                   onTap: () => {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> ResetPasswrod())),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ResetPasswrod())),
                   },
                 ),
               ),
               GestureDetector(
-
-                onTap: () async{
-                  if(formkey.currentState!.validate()){
-                    try{
-                      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: emailidcontroller.text.trim(), password: passcontroller.text.trim());
-                      if (userCredential != null)
-                      {
+                onTap: () async {
+                  if (formkey.currentState!.validate()) {
+                    try {
+                      UserCredential userCredential = await FirebaseAuth
+                          .instance
+                          .signInWithEmailAndPassword(
+                              email: emailidcontroller.text.trim(),
+                              password: passcontroller.text.trim());
+                      if (userCredential != null) {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Dashboard()));
                       }
-                    }
-                    on FirebaseAuthException catch (e) {
+                    } on FirebaseAuthException catch (e) {
                       if (e.code == 'user-not-found') {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('User Not Found')));
@@ -261,13 +232,12 @@ class InitState extends State<LoginScreen> {
                   }
                 },
                 child: Container(
-
                   margin: EdgeInsets.only(left: 50, right: 50, top: 40),
                   padding: EdgeInsets.only(left: 10, right: 10),
                   alignment: Alignment.center,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(50),
                       gradient: LinearGradient(
                         colors: [
                           (new Color(0xFFFFB300)),
@@ -276,15 +246,13 @@ class InitState extends State<LoginScreen> {
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
-
-
                       boxShadow: [
                         BoxShadow(
                             offset: Offset(0, 8),
                             blurRadius: 30,
                             color: Color(0xFFFFB300))
                       ]),
-                    child: Text(
+                  child: Text(
                     "Login",
                     style: TextStyle(color: Colors.black),
                   ),
@@ -294,7 +262,6 @@ class InitState extends State<LoginScreen> {
                 margin: EdgeInsets.only(top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: [
                     Text("Don't have an account ?"),
                     SizedBox(
@@ -308,49 +275,43 @@ class InitState extends State<LoginScreen> {
                             MaterialPageRoute(
                                 builder: (context) => SignUpScreen()))
                       },
-
                       child: Text(
                         "Register Now",
                         style: TextStyle(color: Color(0xFF000000)),
-
                       ),
-
                     ),
-
-
-
-
-                    ],
+                  ],
                 ),
               ),
-        FloatingActionButton.extended(onPressed: () async{
-            await signInWithGoogle();
+              FloatingActionButton.extended(
+                onPressed: () async {
+                  await signInWithGoogle();
 
-            setState(() {
-
-            });
-
-        },
-          icon: Image.asset('assets/google.png',
-            height: 42,
-            width: 52,
-          ),
-
-          label: Text('Sign in with Google'),
-          backgroundColor: Colors.amber,
-
-        ) ],
+                  setState(() {});
+                },
+                icon: Image.asset(
+                  'assets/google.png',
+                  height: 42,
+                  width: 52,
+                ),
+//testing
+                label: Text('Sign in with Google'),
+                backgroundColor: Colors.amber,
+              )
+            ],
           ),
         ),
       ),
     );
   }
+
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -358,8 +319,7 @@ class InitState extends State<LoginScreen> {
       idToken: googleAuth?.idToken,
     );
 
-
-      userEmail = googleUser!.email;
+    userEmail = googleUser!.email;
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
