@@ -1,29 +1,33 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:origin/loginScreen.dart';
-import 'package:origin/signupscreen.dart';
+import 'package:origin/resources/color_manager.dart';
+import 'package:origin/resources/string_manager.dart';
+import 'package:origin/ui/screens/login/loginScreen.dart';
 
-class ResetPasswrod extends StatefulWidget {
+import '../../../controller/auth_provider.dart';
+import '../../../resources/assets_manager.dart';
+
+
+
+class ResetPasswrod extends StatefulWidget
+{
+  const ResetPasswrod({super.key});
   @override
   State<StatefulWidget> createState() => InitState();
-
-
 }
 class InitState extends State<ResetPasswrod>{
-
+  Auth _auth = Auth();
   final formkey = GlobalKey<FormState>();
-
   final TextEditingController emailid = TextEditingController();
-
-
   bool isObscure= false;
 
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return initWidget();
   }
-
   Widget initWidget(){
     return Form(
       key: formkey,
@@ -36,11 +40,7 @@ class InitState extends State<ResetPasswrod>{
                   height: 250,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
-                    gradient: LinearGradient(
-                        colors: [(new Color(0xFFFFB300)), (new Color(0xFFFFB300))],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter
-                    ),
+                    color: ColorManager.darkPrimary
                   ),
                   child: Center(
                     child: Column(
@@ -48,19 +48,19 @@ class InitState extends State<ResetPasswrod>{
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 50),
-                          child: Image.asset("assets/splash.png"),
+                          margin: const EdgeInsets.only(top: 50),
                           height: 90,
                           width: 90,
+                          child:  Image.asset(ImageAssets.splashLogo),
                         ),
                         Container(
-                          margin: EdgeInsets.only(right: 20, top: 20),
+                          margin: const EdgeInsets.only(right: 20, top: 20),
                           alignment: Alignment.bottomRight,
-                          child: Text(
-                            "Reset Password",
+                          child: const Text(
+                            StringManager.resetpass,
                             style: TextStyle(
                                 fontSize: 20,
-                                color: Colors.black
+                                color: Colors.white
                             ),
                           ),
                         )
@@ -71,12 +71,12 @@ class InitState extends State<ResetPasswrod>{
 
 
                 Container(
-                  margin: EdgeInsets.only(left: 20,right: 20, top: 70),
-                  padding: EdgeInsets.only(left: 20,right: 20),
+                  margin: const EdgeInsets.only(left: 20,right: 20, top: 70),
+                  padding: const EdgeInsets.only(left: 20,right: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.grey[200],
-                    boxShadow: [BoxShadow(
+                    boxShadow: const [BoxShadow(
                         offset: Offset(0, 10),
                         blurRadius: 50,
                         color: Color(0xffEEEEEE)
@@ -86,43 +86,33 @@ class InitState extends State<ResetPasswrod>{
                 ),
 
                 Container(
-                    margin: EdgeInsets.only(left: 20,right: 20, top: 42),
-                    padding: EdgeInsets.only(left: 20,right: 20),
-                    // decoration: BoxDecoration(
-                    //   borderRadius: BorderRadius.circular(50),
-                    //   color: Colors.grey[200],
-                    //   boxShadow: [BoxShadow(
-                    //       offset: Offset(0, 10),
-                    //       blurRadius: 50,
-                    //       color: Color(0xffEEEEEE)
-                    //   )],
-                    // ),
+                    margin: const EdgeInsets.only(left: 20,right: 20, top: 42),
+                    padding: const EdgeInsets.only(left: 20,right: 20),
                     alignment: Alignment.center,
                     child: TextFormField(
                       controller: emailid,
-                      cursorColor: Color(0xFFFFB300),
+                      cursorColor: ColorManager.darkPrimary,
                       decoration: InputDecoration(
                         icon: Icon(
                           Icons.email_rounded,
-                          color: Color(0xFFFFB300),
+                          color: ColorManager.darkPrimary
 
                         ),
-                        labelText: "Enter Your Email",
+                        labelText: StringManager.labelemail,
                         enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.amber
+                            borderSide:  BorderSide(
+                                color: ColorManager.darkPrimary
                             ),
                             borderRadius: BorderRadius.circular(10.0)
                         ),
                         errorBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: Colors.amber
-                            ),
+                                color: ColorManager.darkPrimary                            ),
                             borderRadius: BorderRadius.circular(10.0)
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.amber
+                            borderSide:  BorderSide(
+                                color: ColorManager.darkPrimary
                             ),
                             borderRadius: BorderRadius.circular(10.0)
                         ),
@@ -133,11 +123,11 @@ class InitState extends State<ResetPasswrod>{
                       ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return ' Enter your email address';
+                            return StringManager.labelemail;
                           }
                           // Check if the entered email has the right format
                           if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                            return 'Enter a valid email address';
+                            return StringManager.vemail;
                           }
                           // Return null if the entered email is valid
                           return null;
@@ -150,50 +140,30 @@ class InitState extends State<ResetPasswrod>{
                   (
                   onTap: () async{
                     if(formkey.currentState!.validate()) {
-                      try {
-                        await FirebaseAuth.instance.sendPasswordResetEmail(
-                          email: emailid.text.trim(),);
-
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
-                      }
-
-                      on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('User Not Found')));
-                        }
-                      }
+                      await _auth.ResetPasss( emailid: emailid.text,);
                     }
 
                   },
                   child: Container
                     (
-                    margin: EdgeInsets.only(left: 60, right: 60, top: 25),
-                    padding: EdgeInsets.only(left: 40,right: 40),
+                    margin: const EdgeInsets.only(left: 60, right: 60, top: 25),
+                    padding: const EdgeInsets.only(left: 40,right: 40),
                     alignment: Alignment.center,
                     height: 44,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [(new Color(0xFFFFB300)), (new Color(0xFFFFB300))],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
+                       color: ColorManager.darkPrimary,
                         borderRadius: BorderRadius.circular(40),
-                        boxShadow: [BoxShadow(
+                        boxShadow:  [BoxShadow(
                             offset: Offset(0,8),
                             blurRadius: 30,
-                            color: Color(0xFFFFB300)
+                            color: ColorManager.darkPrimary
                         )]
                     ),
-                    child: Text
-                      (
-                      "Reset Password",
+                    child: const Text
+                      (StringManager.resetpass,
                       style: TextStyle
                         (
-                          color: Colors.black
+                          color: Colors.white
 
                       ),
                     ),
@@ -205,5 +175,4 @@ class InitState extends State<ResetPasswrod>{
       ),
     );
   }
-
 }

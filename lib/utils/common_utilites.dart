@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+
+import '../resources/color_manager.dart';
+import '../resources/string_manager.dart';
+
+class CommonUtilites {
+  static getTextInputDecor(
+    String labelText,
+    IconData iconData,
+      {
+    Color colorBorder = Colors.black,
+    Color colorIcon = Colors.black,
+    }
+  ) {
+    return InputDecoration(
+      icon: Icon(iconData, color: colorIcon),
+      labelText: labelText,
+      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: colorBorder,
+          ),
+          borderRadius: BorderRadius.circular(10.0)),
+      errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: colorBorder),
+          borderRadius: BorderRadius.circular(10.0)),
+      focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: colorBorder),
+          borderRadius: BorderRadius.circular(10.0)),
+      focusedBorder:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+    );
+  }
+  static getTextInputDecorPass(
+      String labelTextpass, IconData iconData, Function onLockedClick,
+      {
+        Color colorBorder = Colors.black,
+        Color colorIcon = Colors.black,
+        bool isLocked = true
+      }
+      )
+
+  {
+    return InputDecoration(
+      hintText: StringManager.loginpass,
+      icon: Icon(
+        iconData, color: colorIcon,
+      ),
+      labelText: labelTextpass,
+      suffixIcon: IconButton(
+          focusColor: ColorManager.darkPrimary,
+          icon: Icon(isLocked
+              ? Icons.visibility
+              : Icons.visibility_off),
+          color: ColorManager.darkPrimary,
+          onPressed: () {
+            onLockedClick();
+          }),
+      enabledBorder: OutlineInputBorder(
+          borderSide:
+          BorderSide(color: ColorManager.darkPrimary),
+          borderRadius: BorderRadius.circular(10.0)),
+      errorBorder: OutlineInputBorder(
+          borderSide:
+          BorderSide(color: ColorManager.darkPrimary),
+          borderRadius: BorderRadius.circular(10.0)),
+      focusedErrorBorder: OutlineInputBorder(
+          borderSide:
+          BorderSide(color: ColorManager.darkPrimary),
+          borderRadius: BorderRadius.circular(10.0)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0)),
+    );
+  }
+}

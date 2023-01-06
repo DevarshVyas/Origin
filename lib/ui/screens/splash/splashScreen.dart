@@ -1,11 +1,16 @@
+
+
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:origin/dashboard.dart';
+import 'package:origin/resources/color_manager.dart';
+import 'package:origin/resources/string_manager.dart';
+import 'package:origin/ui/screens/home/dashboard.dart';
 
-import 'loginScreen.dart';
+import 'package:origin/ui/screens/login/loginScreen.dart';
+
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -19,20 +24,24 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       FirebaseAuth.instance.userChanges().listen((User? user) {
         if (user != null) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Dashboard(),
-              ));
+         if(mounted){
+           Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(
+                 builder: (context) => Dashboard(),
+               ));
+         }
         } else {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LoginScreen(),
-              ));
+          if(mounted){
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ));
+          }
         }
       });
     });
@@ -45,20 +54,20 @@ class _SplashState extends State<Splash> {
         children: [
           Container(
             decoration: BoxDecoration(
-                color: Colors.amber
+                color: ColorManager.darkPrimary
             ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 25,
 
               ),
               SpinKitWave(
                 itemBuilder: (BuildContext context, int index){
                   return DecoratedBox(decoration: BoxDecoration(
-                      color: index.isEven ? Colors.white : Colors.amber
+                      color: index.isEven ? Colors.white : ColorManager.darkPrimary
                   ),
                   );
                 },
@@ -79,7 +88,7 @@ class Home extends StatelessWidget {
     return  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: const Text('Origin'),
+        title: const Text(StringManager.origin),
       ),
 
     );
