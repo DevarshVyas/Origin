@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:origin/dashboard.dart';
 
 import 'loginScreen.dart';
 
@@ -15,25 +18,54 @@ class _SplashState extends State<Splash> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 5), (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+    Timer(Duration(seconds: 3), () {
+      FirebaseAuth.instance.userChanges().listen((User? user) {
+        if (user != null) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Dashboard(),
+              ));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginScreen(),
+              ));
+        }
+      });
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/splash.png', height: 130,),
-            const SizedBox(height: 30,),
-          ],
-        ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.amber
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 25,
+
+              ),
+              SpinKitWave(
+                itemBuilder: (BuildContext context, int index){
+                  return DecoratedBox(decoration: BoxDecoration(
+                      color: index.isEven ? Colors.white : Colors.amber
+                  ),
+                  );
+                },
+              )
+            ],
+          )
+        ],
       ),
     );
   }
@@ -49,6 +81,7 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.amber,
         title: const Text('Origin'),
       ),
+
     );
   }
 }

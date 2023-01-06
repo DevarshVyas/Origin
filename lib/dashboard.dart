@@ -1,5 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:origin/loginScreen.dart';
 import 'package:origin/pages/categories.dart';
 import 'package:origin/pages/home.dart';
@@ -27,88 +29,117 @@ class Dashboard extends StatefulWidget
 
   int index = 1;
 
-
   @override
   Widget build(BuildContext context) {
     return initWidget();
   }
-
   Widget initWidget() {
-    return Scaffold(
 
-      appBar: AppBar(
-        title: const Text('Welcome to Origin'),
-        backgroundColor: Colors.amber,
-
-      ),
-
-      bottomNavigationBar: CurvedNavigationBar(
-        items: items,
-        index: index,
-        onTap: (selectedIndex){
-          setState(() {
-            index = selectedIndex;
-          });
-        },
-        height: 70,
-        backgroundColor: Colors.amber,
-        animationDuration: const Duration(microseconds: 300),
-      ),
-
-      drawer: Drawer(
-
-        child: ListView(
-          children: [
-
-            UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.amber
-                ),
-                accountName: Text('Devarsh Vyas'), accountEmail: Text ('devarshvyas02@gmail,com'),),
-
-            ListTile(
-              leading: const Icon(Icons.payment),
-              title: const Text(' Payment method '),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.home_filled),
-              title: const Text('Address'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text(' Household'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('LogOut'),
-              onTap: () {
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()) , (route) => false);
-              },
-            ),
-          ],
+    return SafeArea(
+      child: Scaffold(
+  
+        appBar: AppBar(
+          title: const Text('Welcome to Origin'),
+          backgroundColor: Colors.amber,
 
         ),
+
+        bottomNavigationBar: CurvedNavigationBar(
+          items: items,
+          index: index,
+          onTap: (selectedIndex){
+            setState(() {
+              index = selectedIndex;
+            });
+          },
+          height: 70,
+          backgroundColor: Colors.amber,
+          animationDuration: const Duration(microseconds: 300),
+        ),
+
+        drawer: Drawer(
+
+          child: ListView(
+            children: [
+
+              const UserAccountsDrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.amber
+                  ),
+                  accountName: Text('Devarsh Vyas'), accountEmail: Text('devarshvyas02@gmail.com')
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.payment),
+                title: const Text(' Payment method '),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.home_filled),
+                title: const Text('Address'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text(' Household'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text("Logout"),
+              onTap: () async {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        child: AlertDialog(
+                            backgroundColor: Colors.grey.shade200,
+                            title: Text('Are You Sure Want To Logout?'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () async {
+                                    if (FirebaseAuth.instance.currentUser !=
+                                        null) {
+                                      await FirebaseAuth.instance.signOut();
+                                    }
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginScreen()),
+                                            (route) => false);
+                                  },
+                                  child: Text('Yes')),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('No'))
+                            ]),
+                      );
+                    });
+              }
+              )],
+
+          ),
+        ),
+
+        body: Container(
+          color: Colors.white,
+          width: double.infinity,
+          height: double.infinity,
+          alignment: Alignment.center,
+          child: getSelectedWidget(index: index),
+        ),
+
+
       ),
-
-      body: Container(
-        color: Colors.white,
-        width: double.infinity,
-        height: double.infinity,
-        alignment: Alignment.center,
-        child: getSelectedWidget(index: index),
-      ),
-
-
     );
   }
   Widget getSelectedWidget({required int index}){

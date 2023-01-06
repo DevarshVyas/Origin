@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:origin/loginScreen.dart';
 import 'package:origin/signupscreen.dart';
@@ -12,8 +13,11 @@ class InitState extends State<SignUpScreen>{
 
   final formkey = GlobalKey<FormState>();
 
+  final TextEditingController emailid = TextEditingController();
   final TextEditingController pass = TextEditingController();
   final TextEditingController cnfpass = TextEditingController();
+
+  bool isObscure= false;
 
 
   @override
@@ -83,19 +87,21 @@ class InitState extends State<SignUpScreen>{
             ),
 
             Container(
-              margin: EdgeInsets.only(left: 20,right: 20, top: 42),
+              margin: EdgeInsets.only(left: 20,right: 20, top: 22),
               padding: EdgeInsets.only(left: 20,right: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Colors.grey[200],
-                boxShadow: [BoxShadow(
-                    offset: Offset(0, 10),
-                    blurRadius: 50,
-                    color: Color(0xffEEEEEE)
-                )],
-              ),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(50),
+              //   color: Colors.grey[200],
+              //   boxShadow: [BoxShadow(
+              //       offset: Offset(0, 10),
+              //       blurRadius: 50,
+              //       color: Color(0xffEEEEEE)
+              //   )],
+              // ),
               alignment: Alignment.center,
               child: TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: emailid,
                 cursorColor: Color(0xFFFFB300),
                 decoration: InputDecoration(
                   icon: Icon(
@@ -104,52 +110,120 @@ class InitState extends State<SignUpScreen>{
 
                   ),
                   labelText: "Enter Your Email",
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
                 ),
-                validator: (value){
-                  if(value!.isEmpty ||!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}').hasMatch(value!)){
-                    return "Enter Valid email-id";
-                  }else{
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Enter your email address';
+                    }
+                    // Check if the entered email has the right format
+                    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                      return 'Enter a valid email address';
+                    }
+                    // Return null if the entered email is valid
                     return null;
                   }
-                },
 
 
               )),
 
             Container(
-              margin: EdgeInsets.only(left: 20,right: 20, top: 40),
+              margin: EdgeInsets.only(left: 20,right: 20, top: 20),
               padding: EdgeInsets.only(left: 20,right: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Colors.grey[200],
-                boxShadow: [BoxShadow(
-                    offset: Offset(0, 10),
-                    blurRadius: 50,
-                    color: Color(0xffEEEEEE)
-                )],
-              ),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(50),
+              //   color: Colors.grey[200],
+              //   boxShadow: [BoxShadow(
+              //       offset: Offset(0, 10),
+              //       blurRadius: 50,
+              //       color: Color(0xffEEEEEE)
+              //   )],
+              // ),
               alignment: Alignment.center,
               child: TextFormField(
-                obscureText: true,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: pass,
+                obscureText: isObscure,
                 cursorColor: Color(0xFFFFB300),
                 decoration: InputDecoration(
+                    hintText: "Enter your password",
                   icon: Icon(
-                    Icons.vpn_key_rounded,
+                    Icons.lock,
                     color: Color(0xFFFFB300),
-
                   ),
-                  labelText: "Enter Password",
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
+
+                    suffixIcon: IconButton(
+
+                        focusColor: Color(0xFFFFB300),
+
+                        icon: Icon(isObscure ? Icons.visibility :Icons.visibility_off),
+                        color: Colors.amber,
+                        onPressed: () {
+                          setState(() { //refresh UI
+                            if(isObscure){ //if passenable == true, make it false
+                              isObscure = false;
+                            }else{
+                              isObscure = true; //if passenable == false, make it true
+                            }
+                          });
+
+                        }
+                    ),
+                  labelText: "Enter your password",
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
                 ),
+
+
+
+
                   validator: (value) {
                     RegExp regex =
                     RegExp(
                         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                     if (value!.isEmpty) {
-                      return 'Please enter password';
+                      return 'Enter your password';
                     } else {
                       if (!regex.hasMatch(value)) {
                         return 'Enter valid password';
@@ -161,37 +235,76 @@ class InitState extends State<SignUpScreen>{
             ),
 
             Container(
-              margin: EdgeInsets.only(left: 20,right: 20, top: 35),
+              margin: EdgeInsets.only(left: 20,right: 20, top: 25),
               padding: EdgeInsets.only(left: 20,right: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Colors.grey[200],
-                boxShadow: [BoxShadow(
-                    offset: Offset(0, 10),
-                    blurRadius: 50,
-                    color: Color(0xffEEEEEE)
-                )],
-              ),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(50),
+              //   color: Colors.grey[200],
+              //   boxShadow: [BoxShadow(
+              //       offset: Offset(0, 10),
+              //       blurRadius: 50,
+              //       color: Color(0xffEEEEEE)
+              //   )],
+              // ),
               alignment: Alignment.center,
               child:TextFormField(
-                obscureText: true,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                obscureText: isObscure,
                 cursorColor: Color(0xFFFFB300),
                 decoration: InputDecoration(
+                  hintText: "Confirm password",
                   icon: Icon(
-                    Icons.vpn_key_rounded,
+                    Icons.lock,
                     color: Color(0xFFFFB300),
-
                   ),
-                  labelText: "Confirm Password",
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
+                    suffixIcon: IconButton(
+
+                        focusColor: Color(0xFFFFB300),
+
+                        icon: Icon(isObscure ? Icons.visibility :Icons.visibility_off),
+                        color: Colors.amber,
+                        onPressed: () {
+                          setState(() { //refresh UI
+                            if(isObscure){ //if passenable == true, make it false
+                              isObscure = false;
+                            }else{
+                              isObscure = true; //if passenable == false, make it true
+                            }
+                          });
+
+                        }
+                    ),
+                  labelText: "Enter your confirm password",
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: Colors.amber
+                      ),
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)
+                  ),
+
                 ),
                   validator: (value) {
                     RegExp regex =
                     RegExp(
                         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                     if (value!.isEmpty) {
-                      return 'Please enter password';
+                      return 'Enter your confirm password';
                     } else {
                       if (!regex.hasMatch(value)) {
                         return 'Enter valid password';
@@ -204,26 +317,41 @@ class InitState extends State<SignUpScreen>{
 
             GestureDetector
               (
-              onTap: () => {
+              onTap: () async{
                 if(formkey.currentState!.validate()){
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => LoginScreen()
-                  ))
-                }
-              },
+                  try{
+                    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: emailid.text.trim(), password: pass.text.trim());
+                    if (userCredential != null)
+                    {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
+                    }
+
+                  }
+                  on FirebaseAuthException catch (e) {
+                  if (e.code == 'user-not-found') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('User Not Found')));
+                  }
+                  }
+                  }
+                  },
               child: Container
                 (
-                margin: EdgeInsets.only(left: 20, right: 20, top: 25),
+                margin: EdgeInsets.only(left: 50, right: 50, top: 35),
                 padding: EdgeInsets.only(left: 20,right: 20),
                 alignment: Alignment.center,
                 height: 54,
                 decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
                     gradient: LinearGradient(
                       colors: [(new Color(0xFFFFB300)), (new Color(0xFFFFB300))],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
-                    borderRadius: BorderRadius.circular(50),
                     boxShadow: [BoxShadow(
                         offset: Offset(0, 10),
                         blurRadius: 50,
@@ -248,6 +376,10 @@ class InitState extends State<SignUpScreen>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Already an user ?"),
+                  SizedBox(
+                    height: 30,
+                    width: 8,
+                  ),
                   GestureDetector(
                     onTap: () => {
                       Navigator.pop(context)
