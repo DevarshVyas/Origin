@@ -13,6 +13,7 @@ import 'package:origin/ui/screens/login/loginScreen.dart';
 
 
 class Splash extends StatefulWidget {
+  static const String id = 'splash';
   const Splash({Key? key}) : super(key: key);
 
   @override
@@ -81,6 +82,7 @@ class _SplashState extends State<Splash> {
 }
 
 class Home extends StatelessWidget {
+  static const String id = 'home';
   const Home({Key? key}) : super(key: key);
 
   @override

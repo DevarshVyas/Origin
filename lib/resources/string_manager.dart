@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 class StringManager {
   static const String noRouteFound = 'No route Found';
   static const String requestTimeOut = 'Request Time out. Please try later';
@@ -22,6 +24,8 @@ class StringManager {
   static const String signingoogle = 'Sign in with google';
   static const String enemail = 'Enter your email address';
 
+
+
   //Reset Password
   static const String resetpass = 'Reset Password';
 
@@ -30,7 +34,7 @@ class StringManager {
   static const String Alreadyusr = 'Already an user ?';
   static const String cnfpass = 'Enter your confirm password';
   static const String hintcnf = 'Confirm password';
-  static const String username = 'Enter your Username';
+  static const String vusername = 'Enter your Username';
 
 
   //dashboard
@@ -39,8 +43,14 @@ class StringManager {
   static const String No = 'No';
   static const String Yes = 'Yes';
   static const String exit = 'Are You Sure Want To Logout?';
+  static const String Home = 'Home';
+  static const String vendor = 'Vendor';
+  static const String list = 'list';
+  static const String categories = 'categry';
+  static const String more = 'More';
   static const String logout = 'Logout';
   static const String house = 'HouseHold';
+  static const String Language = 'Change Language';
   static const String address = 'Address';
   static const String payment = 'Payment';
   static const String header = 'John Smith, London, TW12 x44gh';

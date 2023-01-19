@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, must_be_immutable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +8,8 @@ import 'package:origin/resources/color_manager.dart';
 import 'package:origin/user_preferences/user_preferences.dart';
 
 class Productcard extends StatefulWidget {
-
-
-  Productcard({super.key, required this.snapshot,required this.wishid});
+  static const String id = 'productcard';
+  Productcard({super.key, required this.snapshot, required this.wishid});
 
   DataSnapshot snapshot;
   String wishid;
@@ -17,10 +18,8 @@ class Productcard extends StatefulWidget {
 }
 
 class _ProductcardState extends State<Productcard> {
-
-
-  int qty=0;
-  int total=0;
+  int qty = 0;
+  int total = 0;
 
   getQuantity() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -42,6 +41,7 @@ class _ProductcardState extends State<Productcard> {
       });
     }
   }
+
   @override
   void initState() {
     getQuantity();
@@ -60,35 +60,71 @@ class _ProductcardState extends State<Productcard> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: 160,
-              width: 120,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomLeft: Radius.circular(20)),
-                child: Image.network(
-                  widget.snapshot.child('image').value.toString(),
-                  fit: BoxFit.cover,
+            Stack(children: [
+              Container(
+                height: 148,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20)),
+                  child: Image.network(
+                    widget.snapshot.child('image').value.toString(),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
+              Positioned(
+                  top: 1,
+                  child: Container(
+                      height: 15,
+                      width: 70,
+                      decoration: BoxDecoration(
+                          color: ColorManager.green,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10))),
+                      child: Text(
+                        "10% discount",
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ))),
+              Positioned(
+                  bottom: 1,
+                  right: 2,
+                  child: Container(
+                    height: 15,
+                    decoration: BoxDecoration(
+                        color: ColorManager.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                        )),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.star,
+                          size: 15,
+                          color: ColorManager.darkPrimary,
+                        ),
+                        Text("4.5")
+                      ],
+                    ),
+                  )),
+            ]),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  width: 50,
-                ),
                 SizedBox(
-                  height: 90,
+                  height: 100,
                   width: 80,
                   child: Image.asset(ImageAssets.tescoLogo),
                 ),
-
                 Text(
                   widget.snapshot.child('pname').value.toString(),
                   style: TextStyle(
@@ -154,51 +190,64 @@ class _ProductcardState extends State<Productcard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(onTap: ()  async {
-                        if(qty>=1){
-                          setState(() {
-                            qty -= 1;
-                            total = (widget.snapshot
-                                .child('prize')
-                                .value as int) * qty;
-                          }
-                          );
+                      InkWell(
+                        onTap: () async {
+                          if (qty >= 1) {
+                            setState(() {
+                              qty -= 1;
+                              total = (widget.snapshot.child('prize').value
+                                      as int) *
+                                  qty;
+                            });
 
-                          FirebaseFirestore firestore = FirebaseFirestore.instance;
+                            FirebaseFirestore firestore =
+                                FirebaseFirestore.instance;
 
+                            var query = await firestore
+                                .collection('Cart')
+                                .where('pid',
+                                    isEqualTo:
+                                        widget.snapshot.child('pid').value)
+                                .where('wishid', isEqualTo: widget.wishid)
+                                .get();
 
-                          var query = await firestore.collection('Cart').where('pid', isEqualTo: widget.snapshot.child('pid').value).where('wishid', isEqualTo: widget.wishid).get();
-
-                          if(query.size == 0){
-                            FirebaseFirestore.instance.collection('Cart').add({'uid': await UserPreferences.getUserId(),'pid': widget.snapshot.child('pid').value,
-                              'quantity': qty, 'total': total, 'wishid': widget.wishid
+                            if (query.size == 0) {
+                              FirebaseFirestore.instance
+                                  .collection('Cart')
+                                  .add({
+                                'uid': await UserPreferences.getUserId(),
+                                'pid': widget.snapshot.child('pid').value,
+                                'quantity': qty,
+                                'total': total,
+                                'wishid': widget.wishid
+                              });
+                            } else {
+                              var docid = query.docs.first.id;
+                              firestore
+                                  .collection('Cart')
+                                  .doc(docid)
+                                  .update({'quantity': qty, 'total': total});
+                            }
+                            var dbqty = await firestore
+                                .collection("wishlist")
+                                .doc(widget.wishid)
+                                .get()
+                                .then((value) => value.get("qauntity"));
+                            var dbTotal = await firestore
+                                .collection("wishlist")
+                                .doc(widget.wishid)
+                                .get()
+                                .then((value) => value.get("total"));
+                            await firestore
+                                .collection("wishlist")
+                                .doc(widget.wishid)
+                                .update({
+                              "qauntity": dbqty -= 1,
+                              "total": dbTotal -=
+                                  widget.snapshot.child('prize').value
                             });
                           }
-                          else {
-                            var docid = query.docs.first.id;
-                            firestore.collection('Cart').doc(docid).update({'quantity': qty, 'total': total
-                            });
-                          }
-                          var dbqty = await firestore
-                              .collection("wishlist")
-                              .doc(widget.wishid)
-                              .get()
-                              .then(
-                                  (value) => value.get("qauntity"));
-                          var dbTotal = await firestore
-                              .collection("wishlist")
-                              .doc(widget.wishid)
-                              .get()
-                              .then((value) => value.get("total"));
-                          await firestore
-                              .collection("wishlist")
-                              .doc(widget.wishid)
-                              .update({
-                            "qauntity": dbqty -= 1,
-                            "total": dbTotal -= widget.snapshot.child('prize').value
-                          });
-                        }
-                      },
+                        },
                         child: Icon(
                           Icons.remove_circle_outline_sharp,
                           color: ColorManager.darkPrimary,
@@ -215,45 +264,56 @@ class _ProductcardState extends State<Productcard> {
                         onTap: () async {
                           setState(() {
                             qty += 1;
-                            total = (widget.snapshot.child('prize').value as int) * qty;
+                            total =
+                                (widget.snapshot.child('prize').value as int) *
+                                    qty;
                           });
 
-                          FirebaseFirestore firestore = FirebaseFirestore.instance;
+                          FirebaseFirestore firestore =
+                              FirebaseFirestore.instance;
 
+                          var query = await firestore
+                              .collection('Cart')
+                              .where('pid',
+                                  isEqualTo: widget.snapshot.child('pid').value)
+                              .where('wishid', isEqualTo: widget.wishid)
+                              .get();
 
-                          var query = await firestore.collection('Cart').where('pid', isEqualTo: widget.snapshot.child('pid').value).where('wishid', isEqualTo: widget.wishid).get();
-
-                          if(query.size == 0){
-                            FirebaseFirestore.instance.collection('Cart').add({'uid': await UserPreferences.getUserId(),'pid': widget.snapshot.child('pid').value,
-                            'quantity': qty, 'total': total, 'wishid': widget.wishid
+                          if (query.size == 0) {
+                            FirebaseFirestore.instance.collection('Cart').add({
+                              'uid': await UserPreferences.getUserId(),
+                              'pid': widget.snapshot.child('pid').value,
+                              'quantity': qty,
+                              'total': total,
+                              'wishid': widget.wishid
                             });
-                          }
-                          else {
+                          } else {
                             var docid = query.docs.first.id;
-                            firestore.collection('Cart').doc(docid).update({'quantity': qty, 'total': total
-                            });
+                            firestore
+                                .collection('Cart')
+                                .doc(docid)
+                                .update({'quantity': qty, 'total': total});
                           }
                           var dbqty = await firestore
                               .collection("wishlist")
                               .doc(widget.wishid)
                               .get()
-                              .then(
-                                  (value) => value.get("qauntity"));
+                              .then((value) => value.get("qauntity"));
                           var dbTotal = await firestore
                               .collection("wishlist")
                               .doc(widget.wishid)
-                               .get()
+                              .get()
                               .then((value) => value.get("total"));
                           await firestore
                               .collection("wishlist")
                               .doc(widget.wishid)
                               .update({
                             "qauntity": dbqty += 1,
-                            "total": dbTotal += widget.snapshot.child('prize').value
+                            "total": dbTotal +=
+                                widget.snapshot.child('prize').value
                           });
                         },
-                        child:
-                        Icon(
+                        child: Icon(
                           Icons.add_circle_outline_sharp,
                           color: ColorManager.darkPrimary,
                         ),

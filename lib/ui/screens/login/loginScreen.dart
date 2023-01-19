@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:origin/controller/auth_provider.dart';
@@ -7,14 +9,14 @@ import 'package:origin/resources/string_manager.dart';
 import 'package:origin/ui/screens/login/reset_password.dart';
 import 'package:origin/ui/screens/signup/signupscreen.dart';
 import 'package:origin/utils/common_utilites.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../validator.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const String id = 'login';
   const LoginScreen({super.key});
-
   @override
-  State<StatefulWidget> createState() => InitState();
+  State<StatefulWidget> createState() => LoginState();
 }
 
 Future<void> main() async {
@@ -23,13 +25,10 @@ Future<void> main() async {
 }
 
 @override
-class InitState extends State<LoginScreen>
-{
+class LoginState extends State<LoginScreen> {
   // ignore: prefer_final_fields
 
-
-
-  Auth _auth = Auth();
+  final Auth _auth = Auth();
 
   final formkey = GlobalKey<FormState>();
 
@@ -37,9 +36,6 @@ class InitState extends State<LoginScreen>
   final TextEditingController passcontroller = TextEditingController();
 
   bool _isObscure = false;
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +74,7 @@ class InitState extends State<LoginScreen>
                           StringManager.loginin,
                           style: TextStyle(
                             fontSize: 20,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                       )
@@ -90,57 +86,38 @@ class InitState extends State<LoginScreen>
                   margin: const EdgeInsets.only(left: 20, right: 20, top: 70),
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.center,
-                  child: TextFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: emailidcontroller,
-                      cursorColor: ColorManager.darkPrimary,
-                      decoration: CommonUtilites.getTextInputDecor(StringManager.enemail, Icons.email, colorIcon: ColorManager.darkPrimary, colorBorder: ColorManager.darkPrimary),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return StringManager.enemail;
-                        }
-                        // Check if the entered email has the right format
-                        if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                          return StringManager.vemail;
-                        }
-                        // Return null if the entered email is valid
-                        return null;
-                      })),
+                  child: CommonUtilites.getTextEmailFormField(
+                      email: emailidcontroller,
+                      labelText: StringManager.enemail,
+                      iconData: Icons.mail,
+                      colorBorder: ColorManager.darkPrimary,
+                      colorIcon: ColorManager.darkPrimary,
+                      validate: ((p0) => Validation.getEmailValidation(p0)))
+              ),
               Container(
                   margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   alignment: Alignment.center,
-                  child: TextFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: passcontroller,
-                      obscureText: _isObscure,
-                      cursorColor: ColorManager.darkPrimary,
-                      decoration: CommonUtilites.getTextInputDecorPass(StringManager.labelpass, Icons.lock,
-                          isLocked: _isObscure,colorBorder: ColorManager.darkPrimary,colorIcon: ColorManager.darkPrimary,(){
-                            setState(() {
-                              //refresh UI
-                              if (_isObscure) {
-                                //if passenable == true, make it false
-                                _isObscure = false;
-                              } else {
-                                _isObscure =
-                                true; //if passenable == false, make it true
-                              }
-                            });
-                                }),
-                      validator: (value) {
-                        RegExp regex = RegExp(
-                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$');
-                        if (value!.isEmpty) {
-                          return StringManager.labelpass;
+                  child: CommonUtilites.getTextpassFormField(
+                    password: passcontroller,
+                    labelText: StringManager.labelpass,
+                    iconData: Icons.lock,
+                    isObscure: _isObscure,
+                    onTap: () {
+                      setState(() {
+                        //refresh UI
+                        if (_isObscure) {
+                          //if passenable == true, make it false
+                          _isObscure = false;
                         } else {
-                          if (!regex.hasMatch(value)) {
-                            return StringManager.vpass;
-                          } else {
-                            return null;
-                          }
+                          _isObscure = true; //if passenable == false, make it true
                         }
-                      })),
+                      });
+                    },
+                    colorBorder: ColorManager.darkPrimary,
+                    colorIcon: ColorManager.darkPrimary,
+                    validate: ((p0) => Validation.getPasswordValidation(p0)),
+                  ),),
               Container(
                 margin: const EdgeInsets.only(top: 20, right: 20),
                 alignment: Alignment.centerRight,
@@ -228,6 +205,4 @@ class InitState extends State<LoginScreen>
       ),
     );
   }
-
 }
-

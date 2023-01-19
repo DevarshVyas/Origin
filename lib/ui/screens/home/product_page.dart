@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, must_be_immutable, file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -7,9 +9,9 @@ import 'package:origin/resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 
 class Productpage extends StatefulWidget {
+  static const String id = 'productpage';
   Productpage({Key? key, required this.title, required this.wishid})
       : super(key: key);
-
   final String title;
   String wishid;
   @override
@@ -18,7 +20,6 @@ class Productpage extends StatefulWidget {
 
 class _ProductpageState extends State<Productpage> {
   final ref = FirebaseDatabase.instance.ref('product');
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,91 +37,92 @@ class _ProductpageState extends State<Productpage> {
           ],
         ),
         body: Stack(children: [
-          Container(
-            child: Column(
-              children: [
-                Container(
-                  height: 20,
-                  width: 80,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.store_mall_directory,
-                              color: ColorManager.darkPrimary,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'Go to Store',
-                              style: TextStyle(
-                                color: ColorManager.darkPrimary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(color: ColorManager.darkPrimary)),
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                          left: 20,
-                          right: 23,
-                        ),
-                        width: 180,
+          Column(
+            children: [
+              SizedBox(
+                height: 20,
+                width: 80,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: ColorManager.darkPrimary)),
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                        left: 20,
+                        right: 23,
                       ),
-                      Row(
+                      width: 180,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Icon(
-                            Icons.share,
+                            Icons.store_mall_directory,
                             color: ColorManager.darkPrimary,
                           ),
                           SizedBox(
-                            width: 20,
+                            width: 5,
                           ),
-                          Icon(
-                            Icons.person_add,
-                            color: ColorManager.darkPrimary,
+                          Text(
+                            'Go to Store',
+                            style: TextStyle(
+                              color: ColorManager.darkPrimary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
-
-                    ],
-                  ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.share,
+                          color: ColorManager.darkPrimary,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(
+                          Icons.person_add,
+                          color: ColorManager.darkPrimary,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-
-                Expanded(
-                    child: FirebaseAnimatedList(
-                        query: ref,
-                        defaultChild: Text('Loading'),
-                        itemBuilder: (context, snapshot, animation, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 20.0, right: 20),
-                            child: Productcard(
-                              snapshot: snapshot,
-                              wishid: widget.wishid,
-                            ),
-                          );
-                        }))
-              ],
-            ),
+              ),
+              Expanded(
+                  child: FirebaseAnimatedList(
+                      query: ref,
+                      defaultChild: Text('Loading'),
+                      itemBuilder: (context, snapshot, animation, index) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              bottom: (index == snapshot.children.length - 1)
+                                  ? 60
+                                  : 0),
+                          child: Productcard(
+                            snapshot: snapshot,
+                            wishid: widget.wishid,
+                          ),
+                        );
+                      }))
+            ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Container(
                   height: 50,
                   width: double.infinity,
@@ -144,7 +146,7 @@ class _ProductpageState extends State<Productpage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           //crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
+                            SizedBox(
                                 height: 25,
                                 width: 25,
                                 child: Image.asset(ImageAssets.groupLogo)),
@@ -155,7 +157,8 @@ class _ProductpageState extends State<Productpage> {
                                 Text(
                                   "Total ",
                                   style: TextStyle(
-                                      fontSize: 10, fontWeight: FontWeight.bold),
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 StreamBuilder(
                                   stream: FirebaseFirestore.instance
